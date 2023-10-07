@@ -16,10 +16,18 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
+      stage('Deliver') {
+    steps {
+        script {
+            try {
+                sh './jenkins/scripts/deliver.sh > output.log 2>&1'
+            } catch (Exception ex) {
+                currentBuild.result = 'FAILURE'
+                echo "Error: ${ex.message}"
             }
         }
+    }
+}
+
     }
 }
